@@ -14,6 +14,7 @@ exports.jwtTokenValidation = async (req, res, next) => {
         "-password"
       );
       next();
+      console.log("successfully authenticate");
     } else {
       throw new UnAuthorized("No Token");
     }

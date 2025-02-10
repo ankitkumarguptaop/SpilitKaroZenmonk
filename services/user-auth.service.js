@@ -2,7 +2,7 @@ const Model = require("../models/user.model");
 const Users = Model.User;
 const jwt = require("jsonwebtoken");
 
-const { ForBidden, BadRequest ,UnAuthorized } = require("../libs/error");
+const { ForBidden, BadRequest, UnAuthorized } = require("../libs/error");
 
 exports.signUp = async (payload) => {
   const { body, file } = payload;
@@ -28,7 +28,7 @@ const generateToken = (id) => {
 
 exports.signIn = async (payload) => {
   const { email, password } = payload.body;
-  console.log(email,password)
+  console.log(email, password);
   if (!email || !password) {
     throw new BadRequest("Data not given");
   }
