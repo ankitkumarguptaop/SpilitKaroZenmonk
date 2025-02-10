@@ -5,7 +5,7 @@ async function db() {
   try {
     await mongoose.connect(uri);
     console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
+      "Pinged your deployment. You successfully connected to MongoDB!",
     );
   } catch (error) {
     console.error(error);
