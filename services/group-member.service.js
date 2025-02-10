@@ -45,7 +45,7 @@ exports.removeMemberFromGroup = async (payload) => {
   }
 };
 
-exports.listGroupsOfParticularUser = async (payload) => {
+exports.listGroupOfParticularUser = async (payload) => {
   const { user_id } = payload.params;
   const allGroups = await GroupMembers.find({ member_id: user_id }).populate("group_id");
   if (!allGroups) {

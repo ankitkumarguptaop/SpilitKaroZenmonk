@@ -1,6 +1,7 @@
-const { NotFound } = require("../libs/error");
+const { NotFound, BadRequest } = require("../libs/error");
 const Model = require("../models/group.model");
-const Group = Model.Group;
+const GroupMembers = require("../models/group-member.model").GroupMember;
+const Groups = Model.Group;
 
 exports.createGroup = async (payload) => {
   const { name, description } = payload.body;
@@ -8,18 +9,27 @@ exports.createGroup = async (payload) => {
   if (!name || !user_id) {
     throw new BadRequest("Data not given!");
   }
-  const createdGroup = new Group({
+  const createdGroup = new Groups({
     created_by: user_id,
     name: name,
-    description: description
+    description: description,
   });
-  return await createdGroup.save();
+  const group = await createdGroup.save();
+
+  const addedMember = new GroupMembers({
+    group_id: group._id,
+    member_id: user_id,
+  });
+  await addedMember.save();
+
+  return group;
 };
 
 exports.deleteGroup = async (payload) => {
   const { id } = payload.params;
-  const deletedGroup = await Group.findOneAndDelete({ _id: id }, { new: true });
-
+  const deletedGroup = await Groups.deleteOne(
+    { _id: id }
+  );
   if (!deletedGroup) {
     throw new NotFound("Group not found to delete");
   } else {
@@ -27,11 +37,10 @@ exports.deleteGroup = async (payload) => {
   }
 };
 
-
 exports.updateGroup = async (payload) => {
   const { body, params } = payload;
   const id = params.id;
-  const updatedGroup = await Group.findOneAndUpdate({ _id: id }, body, {
+  const updatedGroup = await Groups.findOneAndUpdate({ _id: id }, body, {
     new: true,
   });
   if (!updatedGroup) {
