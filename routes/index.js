@@ -3,5 +3,6 @@ const router = express.Router();
 const {jwtTokenValidation} =require("../middlewares/auth.middleware")
 router.use("/auth", require("./user-auth.route"));
 router.use("/users" , jwtTokenValidation , require("./user.route"));
+router.use("/groups" , jwtTokenValidation , require("./group.router"));
 
 module.exports = router;

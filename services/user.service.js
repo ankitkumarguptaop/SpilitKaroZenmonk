@@ -27,23 +27,12 @@ exports.deleteUser = async (payload) => {
   }
 };
 
-exports.getUser = async (payload) => {
-  const { id } = payload.params;
-  const user = await Users.findOne({ _id: id });
-  
-  if (!user) {
-    throw new NotFound("User not found");
-  } else {
-    return user;
-  }
-};
-
 exports.listUser = async (payload) => {
   const { search } = payload.query;
   const { id } = payload.params;
 
   let filters = {};
-   
+
   if (search) {
     filters = {
       $or: [
@@ -53,9 +42,9 @@ exports.listUser = async (payload) => {
       ],
     };
   }
-  const users = await Users.find({$and: [{$nor : [{_id:id}]},filters]});
+  const users = await Users.find({ $and: [{ $nor: [{ _id: id }] }, filters] });
   if (!users) {
-    throw new NotFound("Users not found ");
+    throw new NotFound("Users not found");
   } else {
     return users;
   }

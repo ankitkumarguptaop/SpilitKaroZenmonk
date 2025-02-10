@@ -13,15 +13,6 @@ exports.listUser = async (req, res) => {
   }
 };
 
-exports.getUser = async (req, res) => {
-  try {
-    const user = await userServices.getUser({ params: req.params });
-    res.status(200).json(user);
-  } catch (error) {
-    console.log("Failed to get user", error.message);
-    res.status(error.statusCode || 500).json({ error: error.message });
-  }
-};
 
 exports.updateUser = async (req, res) => {
   try {
