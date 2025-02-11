@@ -14,7 +14,7 @@ const groupMemberSchema = Schema(
       required: [true, "created_by not given"],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 exports.GroupMember = mongoose.model("GroupMember", groupMemberSchema);

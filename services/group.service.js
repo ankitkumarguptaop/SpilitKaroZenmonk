@@ -27,9 +27,8 @@ exports.createGroup = async (payload) => {
 
 exports.deleteGroup = async (payload) => {
   const { id } = payload.params;
-  const deletedGroup = await Groups.deleteOne(
-    { _id: id }
-  );
+  const deletedGroup = await Groups.findOneAndDelete({ _id: id });
+  await GroupMembers.deleteMany({ group_id: id });
   if (!deletedGroup) {
     throw new NotFound("Group not found to delete");
   } else {

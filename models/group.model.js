@@ -21,13 +21,13 @@ const groupSchema = Schema(
       type: String,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-groupSchema.pre("remove", async function (next) {
-  console.log(this._id)
-  await GroupMembers.deleteMany({ group_id: this._id });
-  next();
-});
+// groupSchema.pre("remove", async function (next) {
+//   console.log(this._id)
+//   await GroupMembers.deleteMany({ group_id: this._id });
+//   next();
+// });
 
 exports.Group = mongoose.model("Group", groupSchema);

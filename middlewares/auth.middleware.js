@@ -8,11 +8,8 @@ exports.jwtTokenValidation = async (req, res, next) => {
   try {
     token = req?.cookies?.jwt;
     if (token) {
-      console.log("token", token);
       const authenticatedUser = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await Users.findById(authenticatedUser._id).select(
-        "-password"
-      );
+      req.user = await Users.findById(authenticatedUser.id).select("-password");
       next();
       console.log("successfully authenticate");
     } else {
