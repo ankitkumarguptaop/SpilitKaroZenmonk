@@ -5,7 +5,7 @@ exports.addMemberToGroup = async (req, res) => {
     const addedMember = await groupMemberServices.addMemberToGroup({
       body: req.body,
       params: req.params,
-      admin: req.user,
+      currentUser: req.user,
     });
     res.status(201).json(addedMember);
   } catch (error) {
@@ -18,24 +18,23 @@ exports.removeMemberFromGroup = async (req, res) => {
   try {
     const removedMember = await groupMemberServices.removeMemberFromGroup({
       params: req.params,
-      admin: req.user,
+      currentUser: req.user,
     });
-    res.status(201).json(removedMember);
+    res.status(200).json(removedMember);
   } catch (error) {
     console.log("Failed to remove Member", error.message);
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
 
-exports.listGroupOfParticularUser = async (req, res) => {
+exports.listGroupMembers = async (req, res) => {
   try {
-    const groupsOfParticularUser =
-      await groupMemberServices.listGroupOfParticularUser({
-        params: req.params,
-      });
-    res.status(201).json(groupsOfParticularUser);
+    const groupMembers = await groupMemberServices.listGroupMembers({
+      params: req.params,
+    });
+    res.status(200).json(groupMembers);
   } catch (error) {
-    console.log("Failed to list Group", error.message);
+    console.log("Failed to list member ", error.message);
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 };

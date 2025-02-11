@@ -38,7 +38,20 @@ exports.deleteGroup = async (req, res) => {
       .status(200)
       .json({ message: "successfuly deleted group", group: deletedGroup });
   } catch (error) {
-    console.log("Failed to delete user", error.message);
+    console.log("Failed to delete group", error.message);
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+};
+
+exports.listGroupOfParticularUser = async (req, res) => {
+  try {
+    const groupsOfParticularUser =
+      await groupServices.listGroupOfParticularUser({
+        params: req.params,
+      });
+    res.status(201).json(groupsOfParticularUser);
+  } catch (error) {
+    console.log("Failed to list Group", error.message);
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 };

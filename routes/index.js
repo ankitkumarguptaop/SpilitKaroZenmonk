@@ -7,7 +7,13 @@ router.use("/groups", jwtTokenValidation, require("./group.router"));
 router.use(
   "/groups/members",
   jwtTokenValidation,
-  require("./group-member.router"),
+  require("./group-member.router")
+);
+router.use("/expense", jwtTokenValidation, require("./expense.router"));
+router.use(
+  "/expense/participnats",
+  jwtTokenValidation,
+  require("./expense-participant.router")
 );
 
 module.exports = router;

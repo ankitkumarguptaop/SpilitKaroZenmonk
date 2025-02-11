@@ -27,6 +27,9 @@ exports.createGroup = async (payload) => {
 
 exports.deleteGroup = async (payload) => {
   const { id } = payload.params;
+  if (!id) {
+    throw new BadRequest("Data not given!");
+  }
   const deletedGroup = await Groups.findOneAndDelete({ _id: id });
   await GroupMembers.deleteMany({ group_id: id });
   if (!deletedGroup) {
@@ -38,7 +41,10 @@ exports.deleteGroup = async (payload) => {
 
 exports.updateGroup = async (payload) => {
   const { body, params } = payload;
-  const id = params.id;
+  const { id } = params;
+  if (!id || !body) {
+    throw new BadRequest("Data not given!");
+  }
   const updatedGroup = await Groups.findOneAndUpdate({ _id: id }, body, {
     new: true,
   });
@@ -46,5 +52,21 @@ exports.updateGroup = async (payload) => {
     throw new NotFound("Group not found to update");
   } else {
     return updatedGroup;
+  }
+};
+
+exports.listGroupOfParticularUser = async (payload) => {
+  //list all the groups of particular user
+  const { user_id } = payload.params;
+  if (!user_id) {
+    throw new BadRequest("Data not given!");
+  }
+  const allGroups = await GroupMembers.find({ member_id: user_id }).populate(
+    "group_id",
+  );
+  if (!allGroups) {
+    throw new NotFound("Groups are not there");
+  } else {
+    return allGroups;
   }
 };

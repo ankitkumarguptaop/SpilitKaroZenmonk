@@ -1,10 +1,13 @@
-const { NotFound } = require("../libs/error");
+const { NotFound, BadRequest } = require("../libs/error");
 const Model = require("../models/user.model");
 const Users = Model.User;
 
 exports.updateUser = async (payload) => {
   const { body, params } = payload;
   const id = params.id;
+  if (!id) {
+    throw new BadRequest("Data not given");
+  }
   const updatedUser = await Users.findOneAndUpdate({ _id: id }, body, {
     new: true,
   });
@@ -18,6 +21,9 @@ exports.updateUser = async (payload) => {
 
 exports.deleteUser = async (payload) => {
   const { id } = payload.params;
+  if (!id) {
+    throw new BadRequest("Data not given");
+  }
   const deletedUser = await Users.findOneAndDelete({ _id: id }, { new: true });
 
   if (!deletedUser) {
@@ -28,9 +34,13 @@ exports.deleteUser = async (payload) => {
 };
 
 exports.listUser = async (payload) => {
+  // for adding members to group
   const { search } = payload.query;
   const { id } = payload.params;
 
+  if (!id) {
+    throw new BadRequest("Data not given");
+  }
   let filters = {};
 
   if (search) {
