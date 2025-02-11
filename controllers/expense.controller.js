@@ -38,7 +38,6 @@ exports.updateExpense = async (req, res) => {
       message: "successfuly expense Updated",
       expense: updatedExpense,
     });
-
   } catch (error) {
     console.log("Failed to update expense", error.message);
     res.status(error.statusCode || 500).json({ error: error.message });

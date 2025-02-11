@@ -5,11 +5,11 @@ const router = express.Router();
 router.post("/:user_id", expenseParticipantControllers.addParticipantToExpense);
 router.patch(
   "/:expense_id",
-  expenseParticipantControllers.updateSetelmentStatus
+  expenseParticipantControllers.updateSetelmentStatus,
 );
 router.delete(
   "/:expense_id/:user_id",
-  expenseParticipantControllers.removeParticipantFromExpense
+  expenseParticipantControllers.removeParticipantFromExpense,
 );
 
 module.exports = router;

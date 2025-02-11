@@ -6,7 +6,7 @@ const Users = require("../models/user.model").User;
 const Groups = require("../models/group.model").Group;
 
 exports.addParticipantToExpense = async (payload) => {
-  const { expense_id, group_id ,pay_amount} = payload.body;
+  const { expense_id, group_id, pay_amount } = payload.body;
   const { user_id } = payload.params;
   const { currentUser } = payload;
   if (!user_id || !pay_amount || !expense_id || !currentUser || !group_id) {

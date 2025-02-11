@@ -36,7 +36,7 @@ exports.deleteExpense = async (payload) => {
 
 exports.updateExpense = async (payload) => {
   const { body, params } = payload;
-  const {id} = params;
+  const { id } = params;
   if (!id) {
     throw new BadRequest(" Expense id not given!");
   }
