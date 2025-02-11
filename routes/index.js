@@ -11,7 +11,7 @@ router.use(
 );
 router.use("/expense", jwtTokenValidation, require("./expense.router"));
 router.use(
-  "/expense/participnats",
+  "/expense/participants",
   jwtTokenValidation,
   require("./expense-participant.router"),
 );

@@ -27,7 +27,6 @@ exports.addParticipantToExpense = async (payload) => {
   const isParticipantAlreadyPresent = await ExpenseParticipants.findOne({
     $and: [{ expense_id: expense_id }, { user_id: user_id }],
   });
-  console.log("isMemberAlreadyPresent", isMemberAlreadyPresent);
   if (isParticipantAlreadyPresent) {
     throw new ForBidden(" participant already exists in expense!");
   } else {
@@ -69,8 +68,8 @@ exports.removeParticipantFromExpense = async (payload) => {
 };
 
 exports.updateSetelmentStatus = async (payload) => {
-  const { expense_id } = payload.params;
-  const { user_id, setelment_status } = payload.body;
+  const { user_id } = payload.params;
+  const { expense_id, setelment_status } = payload.body;
   const expenseParticipant = await ExpenseParticipants.findOneAndUpdate(
     {
       $and: [{ payer_id: user_id }, { expense_id: expense_id }],

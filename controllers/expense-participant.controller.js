@@ -22,7 +22,7 @@ exports.removeParticipantFromExpense = async (req, res) => {
         params: req.params,
         currentUser: req.user,
       });
-    res.status(200).json(removedParticipant);
+    res.status(200).json({ message  : "sucessfuly removed" ,removedParticipant});
   } catch (error) {
     console.log("Failed to remove participant", error.message);
     res.status(error.statusCode || 500).json({ error: error.message });
@@ -34,6 +34,7 @@ exports.updateSetelmentStatus = async (req, res) => {
     const updatedSetelment =
       await expenseParticipantServices.updateSetelmentStatus({
         params: req.params,
+        body:req.body
       });
     res.status(200).json(updatedSetelment);
   } catch (error) {

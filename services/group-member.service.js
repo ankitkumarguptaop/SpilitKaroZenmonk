@@ -64,7 +64,7 @@ exports.removeMemberFromGroup = async (payload) => {
 exports.listGroupMembers = async (payload) => {
   const { group_id } = payload.params;
   const groupMembers = await GroupMembers.find({ group_id: group_id }).populate(
-    "user_id",
+    "member_id",
   );
   if (!groupMembers) {
     throw new NotFound("group members are not there");
