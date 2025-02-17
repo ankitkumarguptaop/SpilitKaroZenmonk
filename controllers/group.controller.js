@@ -6,6 +6,7 @@ exports.createGroup = async (req, res) => {
       body: req.body,
       params: req.params,
     });
+    console.log(group)
     res.status(201).json(group);
   } catch (error) {
     console.log("Failed to create group", error.message);
@@ -33,6 +34,7 @@ exports.deleteGroup = async (req, res) => {
   try {
     const deletedGroup = await groupServices.deleteGroup({
       params: req.params,
+      user:req.user
     });
     res
       .status(200)
@@ -49,7 +51,7 @@ exports.listGroupOfParticularUser = async (req, res) => {
       await groupServices.listGroupOfParticularUser({
         params: req.params,
       });
-    res.status(201).json(groupsOfParticularUser);
+    res.status(200).json(groupsOfParticularUser);
   } catch (error) {
     console.log("Failed to list Group", error.message);
     res.status(error.statusCode || 500).json({ error: error.message });

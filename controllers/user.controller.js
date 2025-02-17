@@ -4,11 +4,12 @@ exports.listUser = async (req, res) => {
   try {
     const users = await userServices.listUser({
       query: req.query,
+      body: req.body,
       params: req.params,
     });
     res.status(200).json(users);
   } catch (error) {
-    console.log("Failed to list users", error.message);
+    console.log("Failed to list users", error);
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 };

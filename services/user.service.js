@@ -1,5 +1,7 @@
 const { NotFound, BadRequest } = require("../libs/error");
 const Model = require("../models/user.model");
+const GroupMembers = require("../models/group-member.model").GroupMember;
+
 const Users = Model.User;
 
 exports.updateUser = async (payload) => {
@@ -36,13 +38,15 @@ exports.deleteUser = async (payload) => {
 exports.listUser = async (payload) => {
   // for adding members to group
   const { search } = payload.query;
-  const { id } = payload.params;
-
-  if (!id) {
+   const { group_id } = payload.params;
+ 
+   console.log(payload)
+  //  console.log(id)
+  if (!group_id ) {
     throw new BadRequest("Data not given");
   }
-  let filters = {};
 
+  let filters = {};
   if (search) {
     filters = {
       $or: [
@@ -52,7 +56,15 @@ exports.listUser = async (payload) => {
       ],
     };
   }
-  const users = await Users.find({ $and: [{ $nor: [{ _id: id }] }, filters] });
+
+const groupMembers =await GroupMembers.find({group_id :group_id}).populate("member_id").select("member_id")
+
+   const ids = groupMembers.map((member)=>(
+           {_id:member.member_id._id}
+        ))
+
+ const users = await Users.find({ $and: [{ $nor: ids }, filters] });
+
   if (!users) {
     throw new NotFound("Users not found");
   } else {

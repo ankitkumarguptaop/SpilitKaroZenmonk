@@ -1,5 +1,6 @@
-const { NotFound, BadRequest } = require("../libs/error");
+const { NotFound, BadRequest, ForBidden } = require("../libs/error");
 const Model = require("../models/group.model");
+
 const GroupMembers = require("../models/group-member.model").GroupMember;
 const Groups = Model.Group;
 
@@ -9,6 +10,7 @@ exports.createGroup = async (payload) => {
   if (!name || !user_id) {
     throw new BadRequest("Data not given!");
   }
+  console.log(name, user_id, description);
   const createdGroup = new Groups({
     created_by: user_id,
     name: name,
@@ -21,12 +23,12 @@ exports.createGroup = async (payload) => {
     member_id: user_id,
   });
   await addedMember.save();
-
   return group;
 };
 
 exports.deleteGroup = async (payload) => {
   const { id } = payload.params;
+  const user = payload.user;
   if (!id) {
     throw new BadRequest("Data not given!");
   }
@@ -62,7 +64,7 @@ exports.listGroupOfParticularUser = async (payload) => {
     throw new BadRequest("Data not given!");
   }
   const allGroups = await GroupMembers.find({ member_id: user_id }).populate(
-    "group_id",
+    "group_id"
   );
   if (!allGroups) {
     throw new NotFound("Groups are not there");

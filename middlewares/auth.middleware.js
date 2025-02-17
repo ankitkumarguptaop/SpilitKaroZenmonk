@@ -7,6 +7,7 @@ exports.jwtTokenValidation = async (req, res, next) => {
   let token;
   try {
     token = req?.cookies?.jwt;
+    console.log(token)
     if (token) {
       const authenticatedUser = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await Users.findById(authenticatedUser.id).select("-password");

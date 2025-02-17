@@ -27,9 +27,9 @@ exports.removeMemberFromGroup = async (req, res) => {
   }
 };
 
-exports.listGroupMembers = async (req, res) => {
+exports.listGroupMember = async (req, res) => {
   try {
-    const groupMembers = await groupMemberServices.listGroupMembers({
+    const groupMembers = await groupMemberServices.listGroupMember({
       params: req.params,
     });
     res.status(200).json(groupMembers);

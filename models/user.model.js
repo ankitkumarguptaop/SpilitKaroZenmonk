@@ -14,7 +14,6 @@ const userSchema = Schema(
     },
     phone_no: {
       type: String,
-      require: [true, "Phone no is not given"],
     },
     avatar: {
       type: String,
@@ -22,6 +21,7 @@ const userSchema = Schema(
     },
     password: {
       type: String,
+      default: "xyz",
       require: [true, "password is not given"],
     },
   },
