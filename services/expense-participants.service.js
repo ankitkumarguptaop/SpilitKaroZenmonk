@@ -83,3 +83,20 @@ exports.updateSetelmentStatus = async (payload) => {
     return expenseParticipant;
   }
 };
+
+
+exports.listExpenseMember = async (payload) => {
+  const { expense_id } = payload.params;
+  if (!expense_id) {
+    throw new BadRequest(" Expense id not given!");
+  }
+  const allParticipants= await ExpenseParticipants.find({
+    expense_id: expense_id,
+  }).populate("payer_id");
+
+  if (!allParticipants) {
+    throw new NotFound("Expense participant is not there");
+  } else {
+    return allParticipants;
+  }
+};

@@ -45,3 +45,16 @@ exports.updateSetelmentStatus = async (req, res) => {
     res.status(error.statusCode || 500).json({ error: error.message });
   }
 };
+
+
+exports.listExpenseMember = async (req, res) => {
+  try {
+    const expenseParticipants = await expenseParticipantServices.listExpenseMember({
+      params: req.params,
+    });
+    res.status(200).json(expenseParticipants);
+  } catch (error) {
+    console.log("Failed to list expense Summary", error.message);
+    res.status(error.statusCode || 500).json({ error: error.message });
+  }
+};

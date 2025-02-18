@@ -17,15 +17,21 @@ exports.addMemberToGroup = async (payload) => {
   if (JSON.stringify(currentUser._id) !== JSON.stringify(group.created_by)) {
     throw new ForBidden("You dont have the access to add user");
   }
-  // const isMemberAlreadyPresent = await GroupMembers.findOne({
-  //   $and: [{ group_id: group_id }, { member_id: user_id }],
-  // });
+
   return await GroupMembers.insertMany(usersToAdd);
 };
 
 exports.removeMemberFromGroup = async (payload) => {
+
+  console.log(payload);
+
   const { group_id } = payload.params;
+  const { removeMembers } = payload.body;
   const { currentUser } = payload;
+
+
+  console.log(removeMembers);
+
   if (!group_id) {
     throw new BadRequest("Data not given!");
   }
@@ -38,8 +44,9 @@ exports.removeMemberFromGroup = async (payload) => {
     throw new ForBidden("You dont have the access to remove user");
   }
 
+
   const removedMember = await GroupMembers.deleteMany({
-    $and: [{ member_id: user_id }, { group_id: group_id }],
+    $or: removeMembers,
   });
   if (!removedMember) {
     throw new NotFound("GroupMember not found to remove");
@@ -50,7 +57,25 @@ exports.removeMemberFromGroup = async (payload) => {
 
 exports.listGroupMember = async (payload) => {
   const { group_id } = payload.params;
-  const groupMembers = await GroupMembers.find({ group_id: group_id })
+  const { search } = payload.query;
+
+  console.log(payload)
+
+  if (!group_id) {
+    throw new BadRequest("Data not given");
+  }
+  let filters = {};
+  if (search) {
+    filters = {
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+        { phone_no: { $regex: search, $options: "i" } },
+      ],
+    };
+  }
+  console.log(filters)
+  const groupMembers = await GroupMembers.find({$and : [{ group_id: group_id } , filters]})
     .populate("member_id")
     .select("member_id");
   if (!groupMembers) {

@@ -38,11 +38,9 @@ exports.deleteUser = async (payload) => {
 exports.listUser = async (payload) => {
   // for adding members to group
   const { search } = payload.query;
-   const { group_id } = payload.params;
- 
-   console.log(payload)
-  //  console.log(id)
-  if (!group_id ) {
+  const { group_id } = payload.params;
+
+  if (!group_id) {
     throw new BadRequest("Data not given");
   }
 
@@ -57,13 +55,13 @@ exports.listUser = async (payload) => {
     };
   }
 
-const groupMembers =await GroupMembers.find({group_id :group_id}).populate("member_id").select("member_id")
+  const groupMembers = await GroupMembers.find({ group_id: group_id })
+    .populate("member_id")
+    .select("member_id");
 
-   const ids = groupMembers.map((member)=>(
-           {_id:member.member_id._id}
-        ))
+  const ids = groupMembers.map((member) => ({ _id: member.member_id._id }));
 
- const users = await Users.find({ $and: [{ $nor: ids }, filters] });
+  const users = await Users.find({ $and: [{ $nor: ids }, filters] });
 
   if (!users) {
     throw new NotFound("Users not found");
