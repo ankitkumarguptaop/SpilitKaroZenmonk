@@ -86,12 +86,12 @@ exports.updateSetelmentStatus = async (payload) => {
 
 
 exports.listExpenseMember = async (payload) => {
-  const { expense_id } = payload.params;
-  if (!expense_id) {
+  const { group_id } = payload.params;
+  if (!group_id) {
     throw new BadRequest(" Expense id not given!");
   }
   const allParticipants= await ExpenseParticipants.find({
-    expense_id: expense_id,
+    group_id: group_id,
   }).populate("payer_id");
 
   if (!allParticipants) {

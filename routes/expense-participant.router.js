@@ -2,7 +2,7 @@ const express = require("express");
 const { expenseParticipantControllers } = require("../controllers");
 const router = express.Router();
 
-router.get("/:expense_id", expenseParticipantControllers.listExpenseMember);
+router.get("/:group_id", expenseParticipantControllers.listExpenseMember);
 router.post("/:user_id", expenseParticipantControllers.addParticipantToExpense);
 router.patch("/:user_id", expenseParticipantControllers.updateSetelmentStatus);
 router.delete(

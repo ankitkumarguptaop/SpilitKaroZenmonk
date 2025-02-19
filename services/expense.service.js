@@ -63,6 +63,7 @@ exports.listExpenseSummary = async (payload) => {
     group_id: group_id,
   })
 
+
   if (!allExpencesParticipantsOfGroup) {
     throw new NotFound("Expense Summary cannot be gernated ");
   } else {
