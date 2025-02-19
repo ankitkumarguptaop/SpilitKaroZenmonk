@@ -22,13 +22,11 @@ exports.addMemberToGroup = async (payload) => {
 };
 
 exports.removeMemberFromGroup = async (payload) => {
-
   console.log(payload);
 
   const { group_id } = payload.params;
   const { removeMembers } = payload.body;
   const { currentUser } = payload;
-
 
   console.log(removeMembers);
 
@@ -44,7 +42,6 @@ exports.removeMemberFromGroup = async (payload) => {
     throw new ForBidden("You dont have the access to remove user");
   }
 
-
   const removedMember = await GroupMembers.deleteMany({
     $or: removeMembers,
   });
@@ -59,7 +56,7 @@ exports.listGroupMember = async (payload) => {
   const { group_id } = payload.params;
   const { search } = payload.query;
 
-  console.log(payload)
+  console.log(payload);
 
   if (!group_id) {
     throw new BadRequest("Data not given");
@@ -74,8 +71,10 @@ exports.listGroupMember = async (payload) => {
       ],
     };
   }
-  console.log(filters)
-  const groupMembers = await GroupMembers.find({$and : [{ group_id: group_id } , filters]})
+  console.log(filters);
+  const groupMembers = await GroupMembers.find({
+    $and: [{ group_id: group_id }, filters],
+  })
     .populate("member_id")
     .select("member_id");
   if (!groupMembers) {

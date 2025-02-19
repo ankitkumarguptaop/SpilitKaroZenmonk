@@ -46,12 +46,12 @@ exports.updateSetelmentStatus = async (req, res) => {
   }
 };
 
-
 exports.listExpenseMember = async (req, res) => {
   try {
-    const expenseParticipants = await expenseParticipantServices.listExpenseMember({
-      params: req.params,
-    });
+    const expenseParticipants =
+      await expenseParticipantServices.listExpenseMember({
+        params: req.params,
+      });
     res.status(200).json(expenseParticipants);
   } catch (error) {
     console.log("Failed to list expense Summary", error.message);

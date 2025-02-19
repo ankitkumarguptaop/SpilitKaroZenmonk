@@ -24,5 +24,4 @@ const groupSchema = Schema(
   { timestamps: true },
 );
 
-
 exports.Group = mongoose.model("Group", groupSchema);

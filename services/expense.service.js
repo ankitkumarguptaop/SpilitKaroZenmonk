@@ -18,8 +18,6 @@ exports.createExpense = async (payload) => {
     group_id: group_id,
   });
 
-
-
   return await createdExpense.save();
 };
 
@@ -61,8 +59,7 @@ exports.listExpenseSummary = async (payload) => {
 
   const allExpencesParticipantsOfGroup = await Expense.find({
     group_id: group_id,
-  })
-
+  });
 
   if (!allExpencesParticipantsOfGroup) {
     throw new NotFound("Expense Summary cannot be gernated ");
@@ -70,5 +67,3 @@ exports.listExpenseSummary = async (payload) => {
     return allExpencesParticipantsOfGroup;
   }
 };
-
-

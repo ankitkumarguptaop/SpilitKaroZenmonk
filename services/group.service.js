@@ -64,7 +64,7 @@ exports.listGroupOfParticularUser = async (payload) => {
     throw new BadRequest("Data not given!");
   }
   const allGroups = await GroupMembers.find({ member_id: user_id }).populate(
-    "group_id"
+    "group_id",
   );
   if (!allGroups) {
     throw new NotFound("Groups are not there");

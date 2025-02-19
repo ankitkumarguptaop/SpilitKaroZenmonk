@@ -37,7 +37,9 @@ exports.addParticipantToExpense = async (payload) => {
       payee_id: currentUser._id,
       group_id: group_id,
     });
-    return await expenceParticipant.save();
+    return await expenceParticipant
+      .save()
+      .then((expenceParticipant) => expenceParticipant.populate("payer_id"));
   }
 };
 
@@ -76,7 +78,7 @@ exports.updateSetelmentStatus = async (payload) => {
     },
     { setelment_status: setelment_status },
     { new: true },
-  );
+  ).populate("payer_id");
   if (!expenseParticipant) {
     throw new NotFound("expenseParticipant not available for upadte");
   } else {
@@ -84,13 +86,12 @@ exports.updateSetelmentStatus = async (payload) => {
   }
 };
 
-
 exports.listExpenseMember = async (payload) => {
   const { group_id } = payload.params;
   if (!group_id) {
     throw new BadRequest(" Expense id not given!");
   }
-  const allParticipants= await ExpenseParticipants.find({
+  const allParticipants = await ExpenseParticipants.find({
     group_id: group_id,
   }).populate("payer_id");
 
