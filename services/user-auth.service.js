@@ -7,8 +7,6 @@ const { ForBidden, BadRequest, UnAuthorized } = require("../libs/error");
 exports.signUp = async (payload) => {
   const { body, file } = payload;
   const avatar = file ? file.path : null;
-  console.log(body);
-  console.log(avatar);
   const { name, password, email, phone_no } = body;
   if (!name || !password || !email || !avatar || !phone_no) {
     throw new BadRequest("Data not given!");
@@ -30,7 +28,6 @@ const generateToken = (id) => {
 
 exports.signIn = async (payload) => {
   const { email, password } = payload.body;
-  console.log(email, password);
   if (!email || !password) {
     throw new BadRequest("Data not given");
   }

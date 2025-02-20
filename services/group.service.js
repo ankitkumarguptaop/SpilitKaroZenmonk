@@ -1,6 +1,8 @@
 const { NotFound, BadRequest, ForBidden } = require("../libs/error");
 const Model = require("../models/group.model");
-
+const Expense = require("../models/expense.model").Expense;
+const ExpenseParticipants =
+  require("../models/expense-participants.model").ExpenseParticipant;
 const GroupMembers = require("../models/group-member.model").GroupMember;
 const Groups = Model.Group;
 
@@ -10,7 +12,6 @@ exports.createGroup = async (payload) => {
   if (!name || !user_id) {
     throw new BadRequest("Data not given!");
   }
-  console.log(name, user_id, description);
   const createdGroup = new Groups({
     created_by: user_id,
     name: name,
@@ -34,6 +35,8 @@ exports.deleteGroup = async (payload) => {
   }
   const deletedGroup = await Groups.findOneAndDelete({ _id: id });
   await GroupMembers.deleteMany({ group_id: id });
+  await Expense.deleteMany({ group_id: id });
+  await ExpenseParticipants.deleteMany({ group_id: id });
   if (!deletedGroup) {
     throw new NotFound("Group not found to delete");
   } else {

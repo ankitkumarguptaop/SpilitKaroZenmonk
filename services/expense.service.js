@@ -38,10 +38,11 @@ exports.deleteExpense = async (payload) => {
 exports.updateExpense = async (payload) => {
   const { body, params } = payload;
   const { id } = params;
+  const { data } = body;
   if (!id) {
     throw new BadRequest(" Expense id not given!");
   }
-  const updatedExpense = await Expense.findOneAndUpdate({ _id: id }, body, {
+  const updatedExpense = await Expense.findOneAndUpdate({ _id: id }, data, {
     new: true,
   });
   if (!updatedExpense) {

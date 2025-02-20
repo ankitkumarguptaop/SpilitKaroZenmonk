@@ -22,13 +22,9 @@ exports.addMemberToGroup = async (payload) => {
 };
 
 exports.removeMemberFromGroup = async (payload) => {
-  console.log(payload);
-
   const { group_id } = payload.params;
   const { removeMembers } = payload.body;
   const { currentUser } = payload;
-
-  console.log(removeMembers);
 
   if (!group_id) {
     throw new BadRequest("Data not given!");
@@ -56,8 +52,6 @@ exports.listGroupMember = async (payload) => {
   const { group_id } = payload.params;
   const { search } = payload.query;
 
-  console.log(payload);
-
   if (!group_id) {
     throw new BadRequest("Data not given");
   }
@@ -71,7 +65,6 @@ exports.listGroupMember = async (payload) => {
       ],
     };
   }
-  console.log(filters);
   const groupMembers = await GroupMembers.find({
     $and: [{ group_id: group_id }, filters],
   })
