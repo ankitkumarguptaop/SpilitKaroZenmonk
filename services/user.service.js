@@ -26,7 +26,7 @@ exports.deleteUser = async (payload) => {
   if (!id) {
     throw new BadRequest("Data not given");
   }
-  const deletedUser = await Users.findOneAndDelete({ _id: id }, { new: true });
+  const deletedUser = await Users.findOneAndDelete({ _id: id });
 
   if (!deletedUser) {
     throw new NotFound("User not found to delete");

@@ -5,17 +5,17 @@ const notificationSchema = Schema(
   {
     notification: {
       type: String,
-      required: [true, "Name is not given"],
+      required: [true, "notification is not given"],
     },
     sender: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "created_by not given"],
+      required: [true, "sender not given"],
     },
     reciever: {
       type: Schema.Types.ObjectId,
       ref: "User",
-      required: [true, "created_by not given"],
+      required: [true, "reciever not given"],
     },
     is_readed: {
       type: Boolean,
