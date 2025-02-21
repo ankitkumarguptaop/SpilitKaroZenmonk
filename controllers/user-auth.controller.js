@@ -37,7 +37,6 @@ exports.googleAuth = async (req, res) => {
     res.cookie("jwt", token, cookieOptions);
     res.status(200).json({ token: token, user: user });
   } catch (error) {
-    console.log(error);
     console.log("unable to signup", error.message);
     res.status(error.statusCode || 500).json({ error: error.message });
   }

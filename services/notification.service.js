@@ -11,7 +11,6 @@ exports.listNotification = async (payload) => {
     createdAt: -1,
   });
 
-  console.log(user._id);
   if (!notifications) {
     throw new NotFound("User not found to delete");
   } else {

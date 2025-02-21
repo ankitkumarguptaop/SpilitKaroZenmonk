@@ -6,7 +6,6 @@ exports.createGroup = async (req, res) => {
       body: req.body,
       params: req.params,
     });
-    console.log(group);
     res.status(201).json(group);
   } catch (error) {
     console.log("Failed to create group", error.message);

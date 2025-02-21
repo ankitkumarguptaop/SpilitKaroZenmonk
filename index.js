@@ -46,7 +46,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("create-expense", ({ room, message }) => {
-    console.log("✌️room --->", room);
     socket.to(room).emit("create-expense-notification", message);
   });
 
