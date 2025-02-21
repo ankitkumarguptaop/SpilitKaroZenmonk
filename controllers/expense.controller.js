@@ -5,6 +5,7 @@ exports.createExpense = async (req, res) => {
     const expense = await expenseServices.createExpense({
       body: req.body,
       params: req.params,
+      user: req.user,
     });
     res.status(201).json(expense);
   } catch (error) {

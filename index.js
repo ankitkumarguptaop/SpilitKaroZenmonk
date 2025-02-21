@@ -23,7 +23,7 @@ app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
     credentials: true,
-  })
+  }),
 );
 
 app.use(cookieParser());
@@ -40,14 +40,24 @@ io.on("connection", (socket) => {
     cb();
   });
 
-  socket.on("join-groups", (group_id) => {
-    socket.join(group_id);
-    console.log("joined groups room :", socket.id, group_id);
+  socket.on("join-groups", (roomIds) => {
+    socket.join(roomIds);
+    console.log("joined groups room :", socket.id, roomIds);
   });
 
-  socket.on("create-expense", (room) => {
+  socket.on("create-expense", ({ room, message }) => {
     console.log("✌️room --->", room);
-    io.to(room).emit("create-expense-notification", "new expense added !");
+    socket.to(room).emit("create-expense-notification", message);
+  });
+
+  socket.on("join-expense", (roomIds) => {
+    socket.join(roomIds);
+    console.log("joined expense room :", socket.id, roomIds);
+  });
+
+  socket.on("settlement", ({ room, message }) => {
+    console.log("settlement --->", room, message);
+    socket.to(room).emit("settlement-notification", message);
   });
 
   socket.on("disconnect", () => {

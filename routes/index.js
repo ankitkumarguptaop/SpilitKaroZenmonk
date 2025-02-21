@@ -15,5 +15,10 @@ router.use(
   jwtTokenValidation,
   require("./expense-participant.router"),
 );
+router.use(
+  "/notifications",
+  jwtTokenValidation,
+  require("./notification.router"),
+);
 
 module.exports = router;

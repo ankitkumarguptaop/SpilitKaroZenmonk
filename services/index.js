@@ -5,4 +5,5 @@ module.exports = {
   groupMemberServices: require("./group-member.service"),
   expenseServices: require("./expense.service"),
   expenseParticipantServices: require("./expense-participants.service"),
+  notificationServices: require("./notification.service"),
 };

@@ -1,12 +1,15 @@
 const { NotFound, BadRequest } = require("../libs/error");
+const GroupMember = require("../models/group-member.model").GroupMember;
 const Expense = require("../models/expense.model").Expense;
 const ExpenseParticipants =
   require("../models/expense-participants.model").ExpenseParticipant;
-const Groups = require("../models/group.model").Group;
+const Notification = require("../models/notification.model").Notification;
+const Group = require("../models/group.model").Group;
 
 exports.createExpense = async (payload) => {
   const { amount, description, category, group_id } = payload.body;
   const { creator_id } = payload.params;
+  const { user } = payload;
   if (!amount || !creator_id || !description || !category || !group_id) {
     throw new BadRequest(" Expense data not given!");
   }
@@ -18,7 +21,40 @@ exports.createExpense = async (payload) => {
     group_id: group_id,
   });
 
-  return await createdExpense.save();
+  if (!createdExpense) {
+    throw new NotFound("Expense not created");
+  }
+
+  const group = await Group.findOne({ _id: group_id });
+
+  if (!group) {
+    throw new BadRequest(" No group present where the notification send");
+  }
+
+  const notificationsUsers = await GroupMember.find({
+    group_id: group_id,
+  });
+  const notifications = notificationsUsers
+    .map((member) => {
+      return {
+        message: `Expense Created in group ${group.name} by ${user.name}`,
+        reciever: member.member_id,
+        sender: user._id,
+        is_readed: false,
+      };
+    })
+    .filter((member) => {
+      return JSON.stringify(member.sender) !== JSON.stringify(member.reciever);
+    });
+
+  const savedExpense = await createdExpense.save();
+
+  await Notification.insertMany(notifications);
+
+  return {
+    expense: savedExpense,
+    message: `Expense Created in group ${group.name} by ${user.name}`,
+  };
 };
 
 exports.deleteExpense = async (payload) => {

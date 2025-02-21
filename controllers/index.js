@@ -5,4 +5,5 @@ module.exports = {
   groupMemberControllers: require("./group-member.controller"),
   expenseControllers: require("./expense.controller"),
   expenseParticipantControllers: require("./expense-participant.controller"),
+  notificationcontrollers: require("./notification.controller"),
 };

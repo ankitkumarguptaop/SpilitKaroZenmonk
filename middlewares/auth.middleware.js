@@ -9,7 +9,7 @@ exports.jwtTokenValidation = async (req, res, next) => {
     token = req?.cookies?.jwt;
     if (token) {
       const authenticatedUser = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await Users.findById(authenticatedUser.id).select("-password");
+      req.user = await Users.findById(authenticatedUser.id).select("-password"); // we can reduce this db call
       next();
       console.log("successfully authenticate");
     } else {

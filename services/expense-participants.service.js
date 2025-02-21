@@ -4,6 +4,7 @@ const ExpenseParticipants =
 const Expense = require("../models/expense.model").Expense;
 const Users = require("../models/user.model").User;
 const Groups = require("../models/group.model").Group;
+const Notification = require("../models/notification.model").Notification;
 
 exports.addParticipantToExpense = async (payload) => {
   const { expense_id, group_id, pay_amount } = payload.body;
@@ -72,17 +73,61 @@ exports.removeParticipantFromExpense = async (payload) => {
 exports.updateSetelmentStatus = async (payload) => {
   const { user_id } = payload.params;
   const { expense_id, setelment_status } = payload.body;
-  const expenseParticipant = await ExpenseParticipants.findOneAndUpdate(
+  const { user } = payload;
+  if (!user_id || !expense_id || !user.name) {
+    throw new BadRequest("Data not given!");
+  }
+
+  const expense = await Expense.findOne({ _id: expense_id });
+
+  if (!expense) {
+    throw new NotFound("Expense Not Found");
+  }
+
+  const updatedExpense = await ExpenseParticipants.findOneAndUpdate(
     {
       $and: [{ payer_id: user_id }, { expense_id: expense_id }],
     },
     { setelment_status: setelment_status },
     { new: true },
   ).populate("payer_id");
-  if (!expenseParticipant) {
-    throw new NotFound("expenseParticipant not available for upadte");
+
+  const notificationsUsers = await ExpenseParticipants.find({
+    expense_id: expense_id,
+  }).populate("payer_id");
+
+  const notifications = notificationsUsers
+    .map((participant) => {
+      return {
+        message: `${user.name} payed the money of expense ${expense.description}`,
+        reciever: participant.payer_id._id,
+        sender: user._id,
+        is_readed: false,
+      };
+    })
+    .filter((participant) => {
+      return (
+        JSON.stringify(participant.sender) !==
+        JSON.stringify(participant.reciever)
+      );
+    });
+
+  const payeeNotification = {
+    message: `${user.name} payed the money of expense ${expense.description}`,
+    reciever: expense.created_by,
+    sender: user._id,
+    is_readed: false,
+  };
+
+  if (!updatedExpense) {
+    throw new NotFound("setelment not found ");
   } else {
-    return expenseParticipant;
+    await Notification.insertMany([...notifications, payeeNotification]);
+    return {
+      message: `${user.name} payed the money of expense ${expense.description}`,
+      updatedExpense: updatedExpense,
+      room: expense_id,
+    };
   }
 };
 

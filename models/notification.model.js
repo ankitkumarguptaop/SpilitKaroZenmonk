@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const notificationSchema = Schema(
   {
-    notification: {
+    message: {
       type: String,
       required: [true, "notification is not given"],
     },
@@ -22,7 +22,7 @@ const notificationSchema = Schema(
       require: false,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 exports.Notification = mongoose.model("Notification", notificationSchema);
